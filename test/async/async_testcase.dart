@@ -19,45 +19,65 @@ abstract class AsyncTestcase {
 
         expect(impl.throwExceptionAfter(1), throwsException);
 
-        var count = impl.count();
-        expect(count, 1);
+        // var count = impl.count();
+        // expect(count, 1);
       });
-      test('simple call with completion', () async {
+      test('simple call wiht try catch', () async {
         var impl = await instance();
-
-        expect(impl.throwExceptionAfter(1), completion(throwsException));
-
-        var count = impl.count();
-        expect(count, 1);
-      });
-      test('call as a function', () async {
-        var impl = await instance();
-
-        expect(() => impl.throwExceptionAfter(1), throwsException);
-
-        var count = impl.count();
-        expect(count, 1);
-      });
-
-      test('call as a explicit async function with await', () async {
-        var impl = await instance();
-
-        expect(() async {
+        try {
           await impl.throwExceptionAfter(1);
-        }, throwsException);
+        } catch (e) {
+          expect(e, isInstanceOf<Exception>());
+        }
 
         var count = impl.count();
         expect(count, 1);
       });
-
-      test('simpel call expectLater', () async {
+      test('simple call with whenComplete', () async {
         var impl = await instance();
-
-        expectLater(impl.throwExceptionAfter(1), throwsException);
-
-        var count = impl.count();
-        expect(count, 1);
+        expect(
+            impl.throwExceptionAfter(1).whenComplete(() {
+              var count = impl.count();
+              expect(count, 1);
+            }),
+            throwsException);
       });
+      // test('simple call with completion', () async {
+      //   var impl = await instance();
+
+      //   expect(impl.throwExceptionAfter(1), completion(throwsException));
+
+      //   var count = impl.count();
+      //   expect(count, 1);
+      // });
+      // test('call as a function', () async {
+      //   var impl = await instance();
+
+      //   expect(() => impl.throwExceptionAfter(1), throwsException);
+
+      //   var count = impl.count();
+      //   expect(count, 1);
+      // });
+
+      // test('call as a explicit async function with await', () async {
+      //   var impl = await instance();
+
+      //   expect(() async {
+      //     await impl.throwExceptionAfter(1);
+      //   }, throwsException);
+
+      //   var count = impl.count();
+      //   expect(count, 1);
+      // });
+
+      // test('simpel call expectLater', () async {
+      //   var impl = await instance();
+
+      //   expectLater(impl.throwExceptionAfter(1), throwsException);
+
+      //   var count = impl.count();
+      //   expect(count, 1);
+      // });
     });
   }
 
